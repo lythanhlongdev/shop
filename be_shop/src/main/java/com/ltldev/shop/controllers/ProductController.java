@@ -1,19 +1,29 @@
-package com.ltldev.shop.controller;
+package com.ltldev.shop.controllers;
+
 import com.ltldev.shop.dto.ProductDTO;
+import com.ltldev.shop.dto.ProductImageDTO;
+import com.ltldev.shop.models.Product;
+import com.ltldev.shop.models.ProductImage;
+import com.ltldev.shop.services.IProductService;
 import com.ltldev.shop.utils.FileUtil;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("${api.prefix}/products")
 public class ProductController {
+
+    private final IProductService productService;
 
     @GetMapping("") // http://localhost:8080/api/v1/products?page=1&limit=10
     public ResponseEntity<String> getProducts(@RequestParam("page") int page, @RequestParam("limit") int limit) {
@@ -64,8 +74,8 @@ public class ProductController {
 //        }
 //    }
 
-    @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> createProduct(@ModelAttribute @Valid ProductDTO req, BindingResult result) {
+    @PostMapping("")
+    public ResponseEntity<?> createProduct(@RequestBody @Valid ProductDTO request, BindingResult result) {
         try {
             // kiểm tra dữ liệu
             if (result.hasErrors()) {
@@ -75,29 +85,45 @@ public class ProductController {
                         .toList();
                 return ResponseEntity.badRequest().body(errMessage);
             }
-
-            // lấy tệp trong yêu cầu DTO
-            List<MultipartFile> files = req.getFiles();
-            // user no upload file files.length = 1 =>  null, check
-            files = files == null ? new ArrayList<MultipartFile>() : files;
-            for (MultipartFile file : files) {
-                // kiểm tra tệp img, nếu img > 10 MB
-                if (file.getSize() > 10 * 1024 * 1024) {
-                    return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).body("File to large ! max size is 10MB");
-                }
-                // kiểm tra loại tệp, phải là hình ảnh
-                String contentType = file.getContentType();
-                if (contentType == null || contentType.startsWith("img/")) {
-                    return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body("File must be an image" + contentType);
-                }
-                // lưu tệp hoặc thay đổi tệp
-                String fileName = FileUtil.saveImg(file);
-                // lưu cơ sở dữ liệu
-            }
+            // save product
+            Product newProduct = productService.createProduct(request);
             // trả về ok nếu vượt qua kiểm tra
-            return ResponseEntity.ok("insert product success " + req);
+            return ResponseEntity.ok("insert product success " + newProduct);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Insert product Error " + e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping(value = "/uploads/{productId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> uploadImgs(@Valid @PathVariable("productId") Long productId, @ModelAttribute List<MultipartFile> files) {
+        try {
+            // user no upload file files.size = 1 =>  null, check
+            List<ProductImage> listImg = new ArrayList<>();
+            Product existingProduct = productService.getProductById(productId);
+            // neu co anh moi luu
+            if (files != null && files.size() != 0) {
+                for (MultipartFile file : files) {
+                    // kiểm tra tệp img, nếu img > 10 MB
+                    if (file.getSize() > 10 * 1024 * 1024) {
+                        return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).body("File to large ! max size is 10MB");
+                    }
+                    // kiểm tra loại tệp, phải là hình ảnh
+                    String contentType = file.getContentType();
+                    if (contentType == null || contentType.startsWith("img/")) {
+                        return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body("File must be an image" + contentType);
+                    }
+                    // lưu tệp hoặc thay đổi tệp
+                    String fileName = FileUtil.saveImg(file);
+
+                    // mapping url and save img
+                    ProductImageDTO productImageDTO = ProductImageDTO.builder().productId(existingProduct.getId()).imgUrl(fileName).build();
+                    ProductImage productImg = productService.ceateProductImage(existingProduct.getId(),productImageDTO);
+                    listImg.add(productImg);
+                }
+            }
+            return ResponseEntity.ok(listImg);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 

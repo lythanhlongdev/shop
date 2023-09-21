@@ -1,4 +1,4 @@
-package com.ltldev.shop.controller;
+package com.ltldev.shop.controllers;
 
 import com.ltldev.shop.dto.OrdersDTO;
 import jakarta.validation.Valid;
