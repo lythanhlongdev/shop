@@ -8,5 +8,5 @@ import com.ltldev.shop.models.User;
 public interface IUserService {
 
     User createUser (UserDTO userDTO) throws DataNotFoundException;
-    String login (LoginDTO loginDTO);
+    User login (LoginDTO loginDTO) throws Exception;
 }

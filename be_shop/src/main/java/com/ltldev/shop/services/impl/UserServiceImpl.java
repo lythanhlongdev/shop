@@ -12,6 +12,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.OpenOption;
+import java.util.Optional;
+
 @RequiredArgsConstructor
 @Service
 public class UserServiceImpl implements IUserService {
@@ -43,7 +46,12 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public String login(LoginDTO loginDTO) {
-        return null;
+    public User login(LoginDTO loginDTO) throws Exception {
+        Optional<User> optionalUser = userRepository.findByPhoneNumber(loginDTO.getPhoneNumber());
+        if (optionalUser.isPresent()){
+            throw new DataNotFoundException("Invalid phone number / password");
+        }
+
+        return optionalUser.get();// user name and pass
     }
 }

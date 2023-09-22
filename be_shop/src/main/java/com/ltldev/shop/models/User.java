@@ -3,9 +3,15 @@ package com.ltldev.shop.models;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @Getter
 @Setter
@@ -14,7 +20,7 @@ import java.time.LocalDateTime;
 @Entity
 @Builder
 @Table(name = "users")
-public class User extends BaseLong {
+public class User extends BaseLong implements UserDetails {
 
     @Column(name = "fullname", length = 100)
     private String fullName;
@@ -58,5 +64,39 @@ public class User extends BaseLong {
     @PreUpdate
     protected void onUpdate() {
         updateAt = LocalDateTime.now();
+    }
+
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        String roleName = this.getRole().getName();
+        List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
+        authorityList.add(new SimpleGrantedAuthority("ROLE_" + roleName));
+        return authorityList;
+    }
+
+    @Override
+    public String getUsername() {
+        return phoneNumber;// truong dang nhap
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }
