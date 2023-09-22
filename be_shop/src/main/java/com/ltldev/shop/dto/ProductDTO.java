@@ -10,6 +10,7 @@ import java.util.List;
 @Data
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductDTO {
@@ -26,5 +27,6 @@ public class ProductDTO {
 
     @JsonProperty("category_id")
     private Long categoryId;
+
 
 }

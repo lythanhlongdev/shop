@@ -10,6 +10,7 @@ import com.ltldev.shop.models.ProductImage;
 import com.ltldev.shop.repositorys.CategoryRepository;
 import com.ltldev.shop.repositorys.ProductImageRepository;
 import com.ltldev.shop.repositorys.ProductRepository;
+import com.ltldev.shop.responses.ProductResponse;
 import com.ltldev.shop.services.IProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -50,9 +51,9 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public Page<Product> getAllProducts(PageRequest pageRequest) {
+    public Page<ProductResponse> getAllProducts(PageRequest pageRequest) {
         // get number of product for page and limit
-        return productRepository.findAll(pageRequest);
+        return productRepository.findAll(pageRequest).map(ProductResponse::mapProduct);
     }
 
     @Override
@@ -105,7 +106,7 @@ public class ProductServiceImpl implements IProductService {
         List<ProductImage> pr = productImageRepository.findByProductId(exitstingProduct.getId());
         int size = pr.size();
         if (size >= 5) {
-            throw  new InvalidParamException("Number of image must be <= 5");
+            throw new InvalidParamException("Number of image must be <= 5");
         }
         return productImageRepository.save(newProductImage);
     }

@@ -1,14 +1,23 @@
 package com.ltldev.shop.controllers;
 
 import com.ltldev.shop.dto.OrdersDTO;
+import com.ltldev.shop.models.Order;
+import com.ltldev.shop.services.IOrderService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
+
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("${api.prefix}/orders")
 public class OrderController {
+
+
+    private final IOrderService orderService;
 
     @PostMapping("")
     public ResponseEntity<?> createOrder(@RequestBody @Valid OrdersDTO request, BindingResult result) {
@@ -20,34 +29,53 @@ public class OrderController {
                         .toList();
                 return ResponseEntity.badRequest().body(errMessage);
             }
-            return ResponseEntity.ok("insert order successfully" + request);
+            orderService.creatOrder(request);
+            return ResponseEntity.ok(orderService.creatOrder(request));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
-    @GetMapping("/{user_id}")
-    public ResponseEntity<?> getOrder(@Valid @PathVariable("user_id") Long id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getOrder(@Valid @PathVariable("id") Long orderId) {
         try {
-            return ResponseEntity.ok("get orders id:" + id);
+            Order exitstingOrder = orderService.getByOrderId(orderId);
+            return ResponseEntity.ok(exitstingOrder);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<?> getAllOrders(@Valid @PathVariable("userId") Long userId) {
+        // change status
+        try {
+            List<Order> orders = orderService.getAllOrderByUserId(userId);
+            return ResponseEntity.ok(orders);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateOrder(@Valid @PathVariable("id") Long id, @Valid @RequestBody OrdersDTO request) {
+    public ResponseEntity<?> updateOrder(@Valid @PathVariable("id") Long orderId, @Valid @RequestBody OrdersDTO request) {
         try {
-            return ResponseEntity.ok("update successfully:" + id + request);
+            Order existing = orderService.updateOrder(orderId, request);
+            return ResponseEntity.ok(existing);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteOrder(@Valid @PathVariable("id") Long id) {
+
+    @DeleteMapping("/{orderId}")
+    public ResponseEntity<?> deleteOrder(@Valid @PathVariable("orderId") Long orderId) {
         // change status
-        return ResponseEntity.ok("Delete orders id:" + id);
+        try {
+            orderService.deleteOrder(orderId);
+            return ResponseEntity.ok("Delete successfully order with id: " + orderId);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }
