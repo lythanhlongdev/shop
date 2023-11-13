@@ -3,7 +3,6 @@ package com.ltldev.shop.services;
 import com.ltldev.shop.dto.OrderDetailDTO;
 import com.ltldev.shop.models.OrderDetail;
 import com.ltldev.shop.responses.OrderDetailResponse;
-import com.ltldev.shop.responses.OrderDetailResponses;
 
 import java.util.List;
 

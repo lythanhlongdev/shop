@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,7 +21,8 @@ import java.util.List;
 @Entity
 @Builder
 @Table(name = "users")
-public class User extends BaseLong implements UserDetails {
+public class User extends BaseLong implements UserDetails{
+
 
     @Column(name = "fullname", length = 100)
     private String fullName;
@@ -69,9 +71,12 @@ public class User extends BaseLong implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        // lây quyền
         String roleName = this.getRole().getName();
         List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
-        authorityList.add(new SimpleGrantedAuthority("ROLE_" + roleName));
+//        authorityList.add(new SimpleGrantedAuthority("ROLE_" + roleName));
+//        authorityList.add(new SimpleGrantedAuthority("ADMIN"));
+        authorityList.add(new SimpleGrantedAuthority("USER"));
         return authorityList;
     }
 

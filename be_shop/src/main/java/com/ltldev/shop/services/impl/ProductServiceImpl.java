@@ -53,7 +53,7 @@ public class ProductServiceImpl implements IProductService {
     @Override
     public Page<ProductResponse> getAllProducts(PageRequest pageRequest) {
         // get number of product for page and limit
-        return productRepository.findAll(pageRequest).map(ProductResponse::mapProduct);
+        return productRepository.findAll(pageRequest).map(ProductResponse:: mapProduct);
     }
 
     @Override

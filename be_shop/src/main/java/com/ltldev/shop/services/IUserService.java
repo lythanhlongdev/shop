@@ -7,6 +7,9 @@ import com.ltldev.shop.models.User;
 
 public interface IUserService {
 
-    User createUser (UserDTO userDTO) throws DataNotFoundException;
+    User createUser (UserDTO userDTO) throws Exception;
     User login (LoginDTO loginDTO) throws Exception;
+
+    String loginToken(LoginDTO loginDTO) throws Exception;
+
 }

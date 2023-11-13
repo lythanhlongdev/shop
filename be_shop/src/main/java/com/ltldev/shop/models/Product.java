@@ -2,6 +2,7 @@ package com.ltldev.shop.models;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import java.time.LocalDateTime;
 
@@ -13,6 +14,8 @@ import java.time.LocalDateTime;
 @Builder
 @Entity
 @Table(name = "products")
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Product extends BaseLong {
 
     @Column(name = "name", nullable = false, length = 350)

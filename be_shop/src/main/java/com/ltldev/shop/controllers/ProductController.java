@@ -168,14 +168,14 @@ public class ProductController {
         }
     }
 
-//        @PostMapping ("/fake_products")
-    private ResponseEntity<String> fakeProducts() {
+        @PostMapping ("/fake_products")
+    public ResponseEntity<String> fakeProducts() {
         Faker fake = new Faker();
         for (int i = 0; i < 10_000; i++) {
             String fakeName = fake.commerce().productName();
-            if (productService.exitsByName(fakeName)) {
-                continue;
-            }
+//            if (productService.exitsByName(fakeName)) {
+//                continue;
+//            }
 
             ProductDTO productDTO = ProductDTO.builder()
                     .name(fakeName)

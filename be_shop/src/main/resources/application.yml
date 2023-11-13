@@ -13,7 +13,8 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
-#        format_sql: true
+
+  #        format_sql: true
   servlet:
     multipart:
       max-request-size: 10MB
@@ -25,4 +26,4 @@ api:
 # environment variable, save token user
 jwt:
   expiration: 2592000 #30 day, 30 * 24 * 60 * 60 = 2592000 s
-  secretKey: "I am mun"
+  secretKey: "TaqlmGv1iEDMRiFp/pHuID1+T84IABfuA0xXh4GhiUI="
