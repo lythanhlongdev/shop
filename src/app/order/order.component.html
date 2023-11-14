@@ -1,0 +1,77 @@
+<app-header></app-header>
+<div class="container">
+    <div class="intro-secsion">
+        <p> This is order </p>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <h2 class="product-header">Thong tin nguoi nhan</h2>
+            <form action="">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Ho va Ten</label>
+                    <input type="text" class="form-control" id="name">
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email">
+                </div>
+                <div class="mb-3">
+                    <label for="Phone" class="form-label">So dien thoai</label>
+                    <input type="text" class="form-control" id="Phone">
+                </div>
+            </form>
+        </div>
+        <div class="col-md-6">
+            <h2 class="product-order">San pham da dat hang</h2>
+            <table>
+                <thead>
+                    <th scope="col" class="text-start">San pham</th>
+                    <th scope="col">So luong</th>
+                    <th scope="col">Don gia</th>
+                    <th scope="col">Tong gia</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="product-info">
+                                <img src="https://images.pexels.com/photos/434346/pexels-photo-434346.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                                alt="macbook" class="product-img">
+                                <span class="product-name">Ten San Pham</span>
+                            </div>
+                        </td>
+                        <td>2</td>
+                        <td>100,000 VND</td>
+                        <td>200,000 VND</td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <div class="product-info">
+                                <img src="https://images.pexels.com/photos/434346/pexels-photo-434346.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                                alt="macbook" class="product-img">
+                                <span class="product-name">Ten San Pham</span>
+                            </div>
+                        </td>
+                        <td>2</td>
+                        <td>100,000 VND</td>
+                        <td>200,000 VND</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="text-start mt-3">
+                <h4 class="hear-text text-end">Tong gia: 400,000 VND</h4>
+            </div>
+            <div class="text-start mt-3">
+                <h4 class="product-header">Nhap coupon</h4>
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Nhap coupon">
+                    <button class="btn-gradient" type="button">Ap dung</button>
+                </div>
+            </div>
+            <div class="text-start mt-3">
+                <button class="btn btn-gradient" type="button">Dat Hang</button>
+            </div>
+        </div>
+    </div>
+</div>
+<app-footer></app-footer>
