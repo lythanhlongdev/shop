@@ -17,4 +17,7 @@ import lombok.Setter;
 public class Role extends BaseLong {
     @Column(name = "name", nullable = false)
     private String name;
+
+    public static String ADMIN = "ADMIN";
+    public static String USER = "USER";
 }

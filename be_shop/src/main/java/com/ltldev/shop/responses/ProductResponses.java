@@ -10,7 +10,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductResponses {
-
     private List<ProductResponse> productResponses;
     private int totalPage;
 }
